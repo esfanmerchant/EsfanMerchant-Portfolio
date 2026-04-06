@@ -1,0 +1,163 @@
+.icons-section {
+  position: fixed;
+  max-width: var(--cMaxWidth);
+  width: var(--cWidth);
+  bottom: 0;
+  z-index: 99;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.icons-section>* {
+  pointer-events: auto;
+}
+
+/* Mobile: compact horizontal pill bar at bottom-left.
+   Uses simple flex centering — no absolute positioning, no magnetic effect. */
+.social-icons {
+  position: absolute;
+  left: 0;
+  bottom: 14px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  z-index: 999;
+  padding: 6px 10px;
+  background: rgba(10, 14, 23, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+}
+
+.social-icons:hover {
+  transition: 0.3s;
+}
+
+.social-icons a:hover {
+  color: var(--accentColor);
+}
+
+.social-icons span {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-icons a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 18px;
+  color: #eae5ec;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.social-icons a:active {
+  transform: scale(0.92);
+}
+
+.resume-button {
+  position: absolute;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  bottom: 18px;
+  right: 0;
+  width: auto;
+  text-wrap: nowrap;
+  letter-spacing: 3px;
+  font-size: 14px;
+  line-height: 14px;
+  font-weight: 600;
+  color: #cfcfcf;
+  cursor: pointer;
+  transition: 0.5s;
+  padding: 8px 14px;
+  background: rgba(10, 14, 23, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+}
+
+.resume-button:hover {
+  color: #fff;
+  border-color: var(--accentColor);
+}
+
+.resume-button span {
+  color: #fff;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+}
+
+@media only screen and (min-width: 900px) {
+
+  /* Desktop: vertical icon column on the left, vertical resume button on the right */
+  .social-icons {
+    flex-direction: column;
+    gap: 18px;
+    left: -10px;
+    bottom: 24px;
+    padding: 10px;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: none;
+    border-radius: 0;
+  }
+
+  .social-icons span {
+    width: 50px;
+    height: 50px;
+    position: relative;
+  }
+
+  /* Magnetic-cursor positioning (set by JS on desktop only) */
+  .social-icons a {
+    --siLeft: 50%;
+    --siTop: 50%;
+    position: absolute;
+    left: var(--siLeft, 50%);
+    top: var(--siTop, 50%);
+    width: auto;
+    height: auto;
+    transform: translate(-50%, -50%);
+    font-size: 28px;
+    will-change: left, top;
+    transition: transform 0.3s ease-out;
+  }
+
+  .resume-button {
+    bottom: 40px;
+    right: 0;
+    padding: 0;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: none;
+    border-radius: 0;
+    color: #5e5e5e;
+    font-size: 20px;
+    line-height: 20px;
+    transform-origin: left bottom;
+    transform: translateX(100%) rotateZ(-90deg);
+  }
+
+  .resume-button:hover {
+    color: #fff;
+  }
+
+  .resume-button span {
+    font-size: 23px;
+  }
+}

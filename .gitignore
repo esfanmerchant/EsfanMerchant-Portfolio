@@ -1,0 +1,63 @@
+# ── Dependencies ──
+node_modules
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# ── Build output ──
+dist
+dist-ssr
+build
+*.local
+
+# ── TypeScript build cache ──
+*.tsbuildinfo
+
+# ── Logs ──
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ── Environment & secrets ──
+.env
+.env.local
+.env.*.local
+.npmrc
+
+# Claude Code MCP config (contains personal access token)
+.mcp.json
+
+# Claude Code session cache
+.claude/
+
+# ── Editor directories and files ──
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+._*
+Thumbs.db
+desktop.ini
+
+# ── Vercel ──
+.vercel
+
+# ── Misc local artifacts ──
+backup/
+.cache
+coverage
+*.tgz
