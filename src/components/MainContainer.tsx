@@ -23,13 +23,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
       setSplitText();
       setIsDesktopView(window.innerWidth > 1024);
     };
-    // Wait for web fonts before splitting text so character widths
-    // are measured against the final font, not the fallback.
-    if (document.fonts?.ready) {
-      document.fonts.ready.then(apply);
-    } else {
-      apply();
-    }
+    apply();
 
     // One-shot fade-in reveals on scroll. Wait a tick so all sections are
     // mounted before ScrollTrigger calculates positions.
