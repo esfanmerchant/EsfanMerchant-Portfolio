@@ -15,6 +15,8 @@ gsap.registerPlugin(ScrollTrigger);
  * any sense of motion at all.
  */
 export function setupScrollFadeIns() {
+  const tracked: HTMLElement[] = [];
+
   const reveal = (
     selector: string,
     opts: { y?: number; stagger?: number; start?: string } = {}
@@ -22,6 +24,7 @@ export function setupScrollFadeIns() {
     const els = gsap.utils.toArray<HTMLElement>(selector);
     if (els.length === 0) return;
     gsap.set(els, { opacity: 0, y: opts.y ?? 32 });
+    tracked.push(...els);
     ScrollTrigger.batch(els, {
       start: opts.start ?? "top 85%",
       once: true,
@@ -51,4 +54,34 @@ export function setupScrollFadeIns() {
 
   // WhatIDo title (the "What I Do" big heading).
   reveal(".whatIDO .title");
+
+  // Mobile/iOS browsers shift the viewport (address bar) and the 3D scene
+  // finishes loading after this function runs, so the ScrollTrigger trigger
+  // positions cached above can become stale. Refresh once the window has
+  // fully loaded so triggers fire against the final layout.
+  const refresh = () => ScrollTrigger.refresh();
+  if (document.readyState === "complete") {
+    requestAnimationFrame(refresh);
+  } else {
+    window.addEventListener("load", refresh, { once: true });
+  }
+
+  // Safety net: if any tracked element is still hidden after the page has had
+  // time to settle (e.g. ScrollTrigger never fired because the element was
+  // already past the trigger window on a small mobile viewport), force it
+  // visible. Better to skip the animation than to leave the section blank.
+  setTimeout(() => {
+    const stillHidden = tracked.filter(
+      (el) => parseFloat(getComputedStyle(el).opacity || "1") < 0.05
+    );
+    if (stillHidden.length > 0) {
+      gsap.to(stillHidden, {
+        opacity: 1,
+        y: 0,
+        duration: 0.5,
+        ease: "power2.out",
+        overwrite: "auto",
+      });
+    }
+  }, 2500);
 }
