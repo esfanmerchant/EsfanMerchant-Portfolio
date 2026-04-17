@@ -107,14 +107,8 @@ const Scene = () => {
         landingDiv.addEventListener("touchstart", onTouchStart);
         landingDiv.addEventListener("touchend", onTouchEnd);
       }
-      let isVisible = true;
-      let animFrameId = 0;
       const animate = () => {
-        if (!isVisible) {
-          animFrameId = 0;
-          return;
-        }
-        animFrameId = requestAnimationFrame(animate);
+        requestAnimationFrame(animate);
         if (headBone) {
           handleHeadRotation(
             headBone,
@@ -133,25 +127,7 @@ const Scene = () => {
         renderer.render(scene, camera);
       };
       animate();
-
-      // Pause the render loop when the character is scrolled off-screen
-      // to save GPU/CPU on all devices.
-      const charContainer = canvasDiv.current;
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          isVisible = entry.isIntersecting;
-          if (isVisible && !animFrameId) {
-            clock.getDelta(); // discard stale delta
-            animFrameId = requestAnimationFrame(animate);
-          }
-        },
-        { threshold: 0 }
-      );
-      observer.observe(charContainer);
-
       return () => {
-        observer.disconnect();
-        if (animFrameId) cancelAnimationFrame(animFrameId);
         clearTimeout(debounce);
         scene.clear();
         renderer.dispose();
