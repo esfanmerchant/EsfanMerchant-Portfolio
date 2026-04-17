@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import "./styles/Work.css";
 import WorkImage from "./WorkImage";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
@@ -57,6 +57,23 @@ const Work = () => {
     return () => workEl?.removeEventListener("keydown", onKey);
   }, [goToPrev, goToNext]);
 
+  // Swipe support for mobile
+  const touchStart = useRef<number | null>(null);
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStart.current = e.touches[0].clientX;
+  }, []);
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      if (touchStart.current === null) return;
+      const diff = touchStart.current - e.changedTouches[0].clientX;
+      touchStart.current = null;
+      if (Math.abs(diff) < 50) return; // ignore small swipes
+      if (diff > 0) goToNext();
+      else goToPrev();
+    },
+    [goToNext, goToPrev]
+  );
+
   return (
     <div className="work-section" id="work" tabIndex={-1}>
       <div className="work-container section-container">
@@ -84,7 +101,11 @@ const Work = () => {
           </button>
 
           {/* Slides */}
-          <div className="carousel-track-container">
+          <div
+            className="carousel-track-container"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
             <div
               className="carousel-track"
               style={{
