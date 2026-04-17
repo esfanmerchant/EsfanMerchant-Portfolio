@@ -6,13 +6,13 @@ const About = () => {
       <div className="about-me">
         <h3 className="title">About Me</h3>
         <p className="para">
-          I'm an AI/ML Engineer and Front-End Developer based in Karachi,
-          Pakistan, currently pursuing a Bachelor's in Data Science at FAST
-          NUCES. I build intelligent, scalable solutions — from machine learning
-          models and NLP systems to responsive React.js interfaces. With
-          hands-on internship experience in both AI/ML engineering and
-          front-end development, I'm passionate about bridging data and design
-          to create impactful, user-centric products.
+          I craft intelligent systems and polished digital experiences.
+          As an AI/ML Engineer and Front-End Developer pursuing Data Science
+          at FAST NUCES, Karachi — I work at the intersection of machine
+          learning, natural language processing, and modern web interfaces.
+          From training models that think to building interfaces that feel,
+          every project I take on is driven by one goal: turning complex
+          ideas into seamless, user-first products.
         </p>
       </div>
     </div>
