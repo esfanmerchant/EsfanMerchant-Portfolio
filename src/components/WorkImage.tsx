@@ -36,7 +36,15 @@ const WorkImage = (props: Props) => {
             <MdArrowOutward />
           </div>
         )}
-        <img src={props.image} alt={props.alt} loading="lazy" decoding="async" />
+        <picture>
+          {props.image.endsWith(".png") && (
+            <source
+              srcSet={props.image.replace(/\.png$/, ".webp")}
+              type="image/webp"
+            />
+          )}
+          <img src={props.image} alt={props.alt} loading="lazy" decoding="async" />
+        </picture>
         {isVideo && <video src={video} autoPlay muted playsInline loop></video>}
       </a>
     </div>

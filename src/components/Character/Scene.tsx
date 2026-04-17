@@ -27,12 +27,13 @@ const Scene = () => {
       const aspect = container.width / container.height;
       const scene = sceneRef.current;
 
+      const isMobile = window.innerWidth <= 1024;
       const renderer = new THREE.WebGLRenderer({
         alpha: true,
-        antialias: true,
+        antialias: !isMobile,
       });
       renderer.setSize(container.width, container.height);
-      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1;
       canvasDiv.current.appendChild(renderer.domElement);
@@ -106,8 +107,14 @@ const Scene = () => {
         landingDiv.addEventListener("touchstart", onTouchStart);
         landingDiv.addEventListener("touchend", onTouchEnd);
       }
+      let isVisible = true;
+      let animFrameId = 0;
       const animate = () => {
-        requestAnimationFrame(animate);
+        if (!isVisible) {
+          animFrameId = 0;
+          return;
+        }
+        animFrameId = requestAnimationFrame(animate);
         if (headBone) {
           handleHeadRotation(
             headBone,
@@ -126,7 +133,25 @@ const Scene = () => {
         renderer.render(scene, camera);
       };
       animate();
+
+      // Pause the render loop when the character is scrolled off-screen
+      // to save GPU/CPU on all devices.
+      const charContainer = canvasDiv.current;
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          isVisible = entry.isIntersecting;
+          if (isVisible && !animFrameId) {
+            clock.getDelta(); // discard stale delta
+            animFrameId = requestAnimationFrame(animate);
+          }
+        },
+        { threshold: 0 }
+      );
+      observer.observe(charContainer);
+
       return () => {
+        observer.disconnect();
+        if (animFrameId) cancelAnimationFrame(animFrameId);
         clearTimeout(debounce);
         scene.clear();
         renderer.dispose();
